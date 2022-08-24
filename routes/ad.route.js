@@ -2,14 +2,24 @@ const express = require('express');
 const Control = require('../controllers/ad.collection');
 const router = express.Router();
 
-router.get('/ads', Control.getAllAds);
+const isLoggedIn = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect('/no');
+  } else {
+    next();
+  }
+};
 
-router.get('/ads/:id', Control.getOneAd);
+router.get('/ads', isLoggedIn, Control.getAllAds);
 
-router.post('/ads', Control.addAd);
+router.get('/ads/:id', isLoggedIn, Control.getOneAd);
 
-router.delete('/ads/:id', Control.deleteAd);
+router.post('/ads', isLoggedIn, Control.addAd);
 
-router.put('/ads/:id', Control.editAd);
+router.delete('/ads/:id', isLoggedIn, Control.deleteAd);
 
-router.get('/ads/search/:searchPhrase', Control.getPhraseAd);
+router.put('/ads/:id', isLoggedIn, Control.editAd); //dodać tylko jeżeli jesteś autorem!!!
+
+router.get('/ads/search/:searchPhrase', isLoggedIn, Control.getPhraseAd);
+
+module.exports = router;
