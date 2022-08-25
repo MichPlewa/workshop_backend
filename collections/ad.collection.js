@@ -1,5 +1,4 @@
 const Ad = require('../modles/ad.model');
-const sanitize = require('mongo-sanitize');
 
 exports.getAllAds = async (req, res) => {
   try {
@@ -29,7 +28,7 @@ exports.addAd = async (req, res) => {
       price,
       reqDestination,
       sellerInfo,
-    } = sanitize(req.body);
+    } = req.body;
     const newAd = new Ad({
       title: title,
       content: content,
@@ -45,7 +44,7 @@ exports.addAd = async (req, res) => {
   }
 };
 
-exports.deletAd = async (req, res) => {
+exports.deleteAd = async (req, res) => {
   try {
     const ad = await Ad.findById(req.params.id);
     if (ad) {

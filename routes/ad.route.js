@@ -1,5 +1,5 @@
 const express = require('express');
-const Control = require('../controllers/ad.collection');
+const Control = require('../collections/ad.collection');
 const router = express.Router();
 
 const isLoggedIn = (req, res, next) => {
