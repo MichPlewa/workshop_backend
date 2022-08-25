@@ -3,6 +3,8 @@ const cors = require('cors');
 const path = require('path');
 const mongoClient = require('mongodb').MongoClient;
 const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 
 const adRouter = require('./routes/ad.route');
 const userRouter = require('./routes/user.route');
@@ -16,7 +18,6 @@ app.listen(process.env.PORT || 8000, () => {
   console.log('server is running on port 8000');
 });
 
-// conection to db
 mongoClient.connect(uri, { useNewUrlParser: true });
 
 const db = mongoose.connection;
@@ -25,15 +26,24 @@ db.once('open', () => console.log('Connected to database'));
 db.on('error', (err) => {
   console.log('error by connecting to db', err);
 });
-// end connection to db TO DO
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(
+  session({
+    secret: 'xyz567',
+    store: new MongoStore({
+      mongooseConnection: mongoose.connection,
+      resave: false,
+      saveUninitialized: false,
+    }),
+  })
+);
 
 app.use(express.static(path.join(__dirname, '/client/build')));
 
-//app.use('/api', adRouter);
+app.use('/api', adRouter);
 app.use('/api/user', userRouter);
 
 app.use((req, res) => {
