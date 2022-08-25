@@ -1,1 +1,9 @@
-const User = require('../modles/user.model');
+const express = require('express');
+const router = express.Router();
+const User = require('../collections/user.collection');
+
+router.post('/register', User.register);
+
+router.post('login', User.login);
+
+module.exports - router;

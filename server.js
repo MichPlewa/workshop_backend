@@ -2,10 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const mongoClient = require('mongodb').MongoClient;
+const mongoose = require('mongoose');
 
 const adRouter = require('./routes/ad.route');
 const userRouter = require('./routes/user.route');
-const { default: mongoose } = require('mongoose');
 
 const app = express();
 
@@ -33,8 +33,8 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, '/client/build')));
 
-app.use('/api', adRouter);
-app.use('/api', userRouter);
+//app.use('/api', adRouter);
+app.use('/api/user', userRouter);
 
 app.use((req, res) => {
   res.status(404).send({ message: 'Not found...' });
