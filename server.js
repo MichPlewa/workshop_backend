@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const mongoClient = require('mongodb').MongoClient;
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
@@ -18,7 +17,10 @@ app.listen(process.env.PORT || 8000, () => {
   console.log('server is running on port 8000');
 });
 
-mongoClient.connect(uri, { useNewUrlParser: true });
+mongoose.connect('mongodb://localhost:27017/ads', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 const db = mongoose.connection;
 
@@ -33,11 +35,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
     secret: 'xyz567',
-    store: new MongoStore({
-      mongooseConnection: mongoose.connection,
-      resave: false,
-      saveUninitialized: false,
-    }),
+    store: MongoStore.create(mongoose.connection),
   })
 );
 

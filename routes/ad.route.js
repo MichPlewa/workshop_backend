@@ -1,14 +1,7 @@
 const express = require('express');
 const Control = require('../collections/ad.collection');
 const router = express.Router();
-
-const isLoggedIn = (req, res, next) => {
-  if (!req.isAuthenticated()) {
-    return res.redirect('/no');
-  } else {
-    next();
-  }
-};
+const {isLoggedIn} = require('../middleware.js/middleware');
 
 router.get('/ads', isLoggedIn, Control.getAllAds);
 

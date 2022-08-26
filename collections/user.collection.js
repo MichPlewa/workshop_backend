@@ -1,5 +1,6 @@
 const User = require('../modles/user.model');
 const bcrypt = require('bcryptjs');
+const { isLoggedIn } = require('../middleware.js/middleware');
 
 exports.register = async (req, res) => {
   const { login, password } = req.body;
@@ -46,6 +47,18 @@ exports.login = async (req, res) => {
           res.status(400).send({ message: 'Login or Password is incorrect' });
         }
       }
+    }
+  } catch (err) {
+    res.status(500).send({ message: err });
+  }
+};
+
+exports.logout = async (req, res) => {
+  try {
+    if (isLoggedIn) {
+      req.session.destroy();
+    } else {
+      res.status(400).send({ message: 'Not found' });
     }
   } catch (err) {
     res.status(500).send({ message: err });

@@ -4,6 +4,8 @@ const User = require('../collections/user.collection');
 
 router.post('/register', User.register);
 
-router.post('login', User.login);
+router.post('/login', User.login);
+
+router.delete('/logout', User.logout);
 
 module.exports = router;
