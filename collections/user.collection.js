@@ -1,15 +1,20 @@
 const User = require('../modles/user.model');
 const bcrypt = require('bcryptjs');
-const { isLoggedIn } = require('../middleware.js/middleware');
+const { isLoggedIn } = require('../utils/middleware');
+const getImageFileType = require('../utils/getImageFileType');
 
 exports.register = async (req, res) => {
-  const { login, password } = req.body;
+  const fileType = await getImageFileType(req.file);
+  const { login, password, avatar } = req.body;
+  console.log(req.body, req.file);
   try {
     if (
       login &&
       typeof login === 'string' &&
       password &&
-      typeof password === 'string'
+      typeof password === 'string' &&
+      req.file &&
+      ['image/png', 'image/jpeg', 'image/gif'].includes(fileType)
     ) {
       const userWithLogin = await User.findOne({ login });
       if (userWithLogin) {
@@ -20,6 +25,7 @@ exports.register = async (req, res) => {
       const user = await User.create({
         login,
         password: await bcrypt.hash(password, 10),
+        avatar: req.file.filename,
       });
       res.status(201).send({ message: 'User created' + user.login });
     } else res.status(400).send({ message: 'Bad request' });

@@ -1,7 +1,7 @@
 const express = require('express');
 const Control = require('../collections/ad.collection');
 const router = express.Router();
-const {isLoggedIn} = require('../middleware.js/middleware');
+const { isLoggedIn } = require('../utils/middleware');
 
 router.get('/ads', isLoggedIn, Control.getAllAds);
 
