@@ -19,26 +19,26 @@ exports.getOneAd = async (req, res) => {
 };
 
 exports.addAd = async (req, res) => {
+  const fileType = await getImageFileType(req.file);
+
   try {
-    const {
-      title,
-      content,
-      publishDate,
-      img,
-      price,
-      reqDestination,
-      sellerInfo,
-    } = req.body;
-    const newAd = new Ad({
-      title: title,
-      content: content,
-      publishDate: publishDate,
-      img: img,
-      price: price,
-      reqDestination: reqDestination,
-      sellerInfo: sellerInfo,
-    });
-    await newAd.save();
+    if (
+      req.file &&
+      ['image/png', 'image/jpeg', 'image/gif'].includes(fileType)
+    ) {
+      const { title, content, publishDate, price, reqDestination, sellerInfo } =
+        req.body;
+      const newAd = new Ad({
+        title: title,
+        content: content,
+        publishDate: publishDate,
+        img: req.file,
+        price: price,
+        reqDestination: reqDestination,
+        sellerInfo: sellerInfo,
+      });
+      await newAd.save();
+    }
   } catch (err) {
     res.status(500).json({ message: err });
   }
@@ -57,15 +57,8 @@ exports.deleteAd = async (req, res) => {
 };
 
 exports.editAd = async (req, res) => {
-  const {
-    title,
-    content,
-    publishDate,
-    img,
-    price,
-    reqDestination,
-    sellerInfo,
-  } = req.body;
+  const { title, content, publishDate, price, reqDestination, sellerInfo } =
+    req.body;
   try {
     const ad = await Ad.findById(req.params.id);
     if (ad) {
@@ -76,7 +69,7 @@ exports.editAd = async (req, res) => {
             title: title,
             content: content,
             publishDate: publishDate,
-            img: img,
+            img: req.file,
             price: price,
             reqDestination: reqDestination,
             sellerInfo: sellerInfo,
