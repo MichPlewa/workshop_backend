@@ -2,17 +2,18 @@ import { Container } from 'react-bootstrap';
 import Header from './colection/view/Header/Header';
 import { Route, Routes } from 'react-router-dom';
 import Home from './colection/Pages/Home/Home';
+import AddAd from './colection/Pages/Ad/AddAd';
 
 const App = () => {
   return (
-    <main>
-      <Container>
-        <Header />
+    <Container>
+      <Header>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/Add/Ad" element={<AddAd />} />
         </Routes>
-      </Container>
-    </main>
+      </Header>
+    </Container>
   );
 };
 
