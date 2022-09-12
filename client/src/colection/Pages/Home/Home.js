@@ -9,7 +9,7 @@ const Home = () => {
       <Container>
         <Row className="mb-5 d-flex-end">
           <Col>
-            <Button variant="outline-success" to="/add/ad" as={Link}>
+            <Button to="/add/ad" as={Link}>
               New Advert
             </Button>
           </Col>
@@ -21,7 +21,7 @@ const Home = () => {
                 className="me-2"
                 aria-label="Search"
               />
-              <Button variant="outline-success" as={Link} to={'/search/'}>
+              <Button as={Link} to={'/search/'}>
                 Search
               </Button>
             </Form>
