@@ -10,6 +10,7 @@ const App = () => {
       <Header>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route paht="/Add/:id" element={<Add />} />
           <Route path="/Add/Ad" element={<AddAd />} />
         </Routes>
       </Header>
