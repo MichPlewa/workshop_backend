@@ -1,8 +1,12 @@
 import { Form, Button, Alert, Spinner } from 'react-bootstrap';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { API_URL } from '../../../config';
+import { fetchAds } from '../../../Redux/adRedux';
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const ad = useEffect(() => dispatch(fetchAds()), [dispatch]);
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState(null);

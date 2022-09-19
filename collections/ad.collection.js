@@ -19,25 +19,41 @@ exports.getOneAd = async (req, res) => {
 };
 
 exports.addAd = async (req, res) => {
-  const fileType = await getImageFileType(req.file);
-
   try {
+    const { title, content, publishDate, price, reqDestination, sellerInfo } =
+      req.body;
+    const fileType = req.file ? await getImageFileType(req.file) : 'unknown';
+
     if (
+      title &&
+      title.length >= 10 &&
+      title.length <= 50 &&
+      content &&
+      content.length >= 20 &&
+      content.length <= 1000 &&
+      publishDate &&
       req.file &&
-      ['image/png', 'image/jpeg', 'image/gif'].includes(fileType)
+      ['image/png', 'image/jpeg', 'image/gif'].includes(fileType) &&
+      price &&
+      reqDestination &&
+      sellerInfo
     ) {
-      const { title, content, publishDate, price, reqDestination, sellerInfo } =
-        req.body;
-      const newAd = new Ad({
-        title: title,
-        content: content,
-        publishDate: publishDate,
-        img: req.file,
-        price: price,
-        reqDestination: reqDestination,
-        sellerInfo: sellerInfo,
+      const ad = Ad.create({
+        title,
+        content,
+        publishDate,
+        img: req.file.filename,
+        price,
+        reqDestination,
+        sellerInfo,
       });
-      await newAd.save();
+
+      res.status(201).send({ message: 'Add created ' });
+    } else {
+      if (req.file) {
+        fs.unlinkSync(`./public/uploads/${req.file.filename}`);
+      }
+      res.status(400).send({ message: 'Bad request' });
     }
   } catch (err) {
     res.status(500).json({ message: err });
