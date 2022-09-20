@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 
 const Login = () => {
   const dispatch = useDispatch();
-  const ad = useEffect(() => dispatch(fetchAds()), [dispatch]);
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [status, setStatus] = useState(null);

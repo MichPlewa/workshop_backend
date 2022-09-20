@@ -29,13 +29,25 @@ db.on('error', (err) => {
   console.log('error by connecting to db', err);
 });
 
-app.use(cors());
+if (process.env.NODE_ENV !== 'production') {
+  app.use(
+    cors({
+      origin: ['http://localhost:3000'],
+      credentials: true,
+    })
+  );
+}
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
     secret: 'xyz567',
     store: MongoStore.create(mongoose.connection),
+    cookie: {
+      secure: process.env.NODE_ENV == 'production',
+    },
+    resave: false,
+    saveUninitialized: false,
   })
 );
 

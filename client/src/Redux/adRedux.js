@@ -25,8 +25,15 @@ export const searchAd = (searchPhrase) => ({
 
 export const fetchAds = () => {
   return (dispatch) => {
-    fetch(API_URL + '/ads')
-      .then((res) => res.json())
+    const options = {
+      method: 'GET',
+      credentials: 'include',
+    };
+    fetch(API_URL + '/ads', options)
+      .then((res) => {
+        console.log(res);
+        return res.json();
+      })
       .then((ads) => dispatch(updateAds(ads)));
   };
 };
